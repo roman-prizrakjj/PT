@@ -1,4 +1,4 @@
-const { contextBridge } = require('electron');
+import { contextBridge } from 'electron';
 
 // Экспортируем API для использования в renderer process
 contextBridge.exposeInMainWorld('electronAPI', {

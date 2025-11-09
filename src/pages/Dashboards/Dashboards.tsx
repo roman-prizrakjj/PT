@@ -3,7 +3,6 @@ import {
   IncidentsChart, 
   SectorsChart, 
   MotivationChart, 
-  ImportChart, 
   KanbanChart, 
   PositiveImportChart 
 } from '../../components/DashboardCharts';
@@ -67,12 +66,6 @@ const Dashboards: React.FC<DashboardsProps> = ({ onBack }) => {
           <MotivationChart 
             subtitle={activeTabData.subtitle || ''} 
             data={activeTabData.data as { label: string; value: number }[]} 
-          />
-        )}
-        {activeTab === 'import' && activeTabData && Array.isArray(activeTabData.data) && activeTabData.data.length > 0 && 'year' in activeTabData.data[0] && (
-          <ImportChart 
-            subtitle={activeTabData.subtitle || ''} 
-            data={activeTabData.data as { year: string; foreign: number; domestic: number }[]} 
           />
         )}
         {activeTab === 'kanban' && activeTabData && (
