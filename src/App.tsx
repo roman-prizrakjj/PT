@@ -16,8 +16,11 @@ const App: React.FC = () => {
   const { resetTimer } = useIdleTimer({
     timeout: 90000, // 90 секунд
     onIdle: () => {
-      console.log('Returning to screensaver after 90s of inactivity');
-      setCurrentView('video');
+      // Проверяем что не на экране видео, чтобы не перезапускать его
+      if (currentView !== 'video') {
+        console.log('Returning to screensaver after 90s of inactivity');
+        setCurrentView('video');
+      }
     },
     events: ['touchstart', 'click']
   });

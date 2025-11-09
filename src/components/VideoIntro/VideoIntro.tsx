@@ -106,9 +106,16 @@ const VideoIntro: React.FC<VideoIntroProps> = ({ onVideoClick }) => {
     startSyncedVideo();
     
     return () => {
+      // Очистка при размонтировании
       if (syncIntervalRef.current) {
         clearInterval(syncIntervalRef.current);
       }
+      if (videoRef.current) {
+        videoRef.current.pause();
+        videoRef.current.src = '';
+      }
+      // Сбрасываем флаг загрузки
+      isLoadingRef.current = false;
     };
   }, []);
   
