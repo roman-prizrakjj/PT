@@ -79,23 +79,20 @@ const VideoIntro: React.FC<VideoIntroProps> = ({ onVideoClick }) => {
       // Ждем загрузки метаданных перед установкой позиции
       const handleLoadedMetadata = () => {
         if (videoRef.current) {
-          videoRef.current.currentTime = info.startPosition;
-          videoRef.current.play().catch(err => {
-            console.error('Error playing video:', err);
-          });
+          // Перерасчитываем позицию с учетом времени загрузки
+          const freshInfo = getCurrentVideoInfo();
+          if (freshInfo) {
+            videoRef.current.currentTime = freshInfo.startPosition;
+            videoRef.current.play().catch(err => {
+              console.error('Error playing video:', err);
+            });
+          }
           isLoadingRef.current = false;
         }
         video.removeEventListener('loadedmetadata', handleLoadedMetadata);
       };
       
       video.addEventListener('loadedmetadata', handleLoadedMetadata);
-    } else {
-      // Просто корректируем позицию если видео то же самое
-      const drift = Math.abs(video.currentTime - info.startPosition);
-      if (drift > 2) {
-        console.warn(`Correcting drift: ${drift.toFixed(2)}s`);
-        video.currentTime = info.startPosition;
-      }
     }
   };
   
@@ -107,30 +104,6 @@ const VideoIntro: React.FC<VideoIntroProps> = ({ onVideoClick }) => {
   useEffect(() => {
     // Запускаем видео при монтировании
     startSyncedVideo();
-    
-    // Периодическая проверка синхронизации (каждые 10 сек)
-    syncIntervalRef.current = setInterval(() => {
-      const info = getCurrentVideoInfo();
-      if (!info || !videoRef.current || isLoadingRef.current) return;
-      
-      const video = videoRef.current;
-      
-      // Проверяем правильное видео
-      if (!video.src.includes(info.videoFile)) {
-        console.warn('Video out of sync, switching...');
-        startSyncedVideo();
-        return;
-      }
-      
-      // Проверяем дрифт позиции (только если видео играет)
-      if (!video.paused) {
-        const drift = Math.abs(video.currentTime - info.startPosition);
-        if (drift > 2) {
-          console.warn(`Drift detected: ${drift.toFixed(2)}s, correcting...`);
-          video.currentTime = info.startPosition;
-        }
-      }
-    }, 10000);
     
     return () => {
       if (syncIntervalRef.current) {
@@ -151,9 +124,6 @@ const VideoIntro: React.FC<VideoIntroProps> = ({ onVideoClick }) => {
       >
         Ваш браузер не поддерживает видео
       </video>
-      <div className="video-intro__overlay">
-        <p className="video-intro__text">Нажмите на экран для продолжения</p>
-      </div>
     </div>
   );
 };
