@@ -33,6 +33,3 @@ yarn-error.log*
 .env
 .env.local
 .env.*.local
-
-# Videos (large files)
-public/assets/videos/*.mp4

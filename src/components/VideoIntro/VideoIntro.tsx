@@ -1,8 +1,49 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './VideoIntro.css';
 
-// Длительность полного видео в миллисекундах
-const TOTAL_VIDEO_DURATION = 492757; // 492.757 секунд
+// Конфигурация плейлиста видео
+const VIDEO_PLAYLIST = [
+  { file: 'SSV_0_PromoBugBounty.mp4', duration: 95.000 },
+  { file: 'SSV_1_DemoBugBounty.mp4', duration: 108.800 },
+  { file: 'SSV_2_PromoCyberBattle.mp4', duration: 73.920 },
+  { file: 'SSV_3_PromoEducation.mp4', duration: 110.160 },
+  { file: 'SSV_4_ProgrammingOlymp.mp4', duration: 30.000 },
+  { file: 'SSV_5_AboutPT.mp4', duration: 71.67 }
+];
+
+// Вспомогательные функции из DetectNowVideo.JS
+function getDayStartOffsetSeconds(d = new Date()): number {
+  return d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds() + d.getMilliseconds() / 1000;
+}
+
+function getCurrentVideo(durations: number[], offset = getDayStartOffsetSeconds()): { VideoIndex: number; VideoTime: number } {
+  // Накопим суммы, определим total
+  let total = 0;
+  const cum: number[] = [];
+  for (const x of durations) cum.push(total += x);
+  if (!total) return { VideoIndex: -1, VideoTime: 0 };
+
+  // Положение в цикле
+  const t = offset % total;
+
+  // Бинарный поиск первого cum[i] >= t
+  let lo = 0;
+  let hi = cum.length;
+  while (lo < hi) {
+    const mid = (lo + hi) >>> 1;
+    if (cum[mid] >= t) {
+      hi = mid;
+    } else {
+      lo = mid + 1;
+    }
+  }
+
+  const i = lo;
+  const prev = i ? cum[i - 1] : 0;
+  const pos = t - prev;
+
+  return { VideoIndex: i, VideoTime: pos };
+}
 
 interface VideoIntroProps {
   onVideoClick: () => void;
@@ -11,30 +52,57 @@ interface VideoIntroProps {
 const VideoIntro: React.FC<VideoIntroProps> = ({ onVideoClick }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const syncIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [, setCurrentVideoIndex] = useState(0);
+  const [debugInfo, setDebugInfo] = useState({
+    currentTime: '--:--:--',
+    offsetFromMidnight: '0.000',
+    videoIndex: 0,
+    videoFile: '',
+    positionInVideo: '0.000'
+  });
   
   const startSyncedVideo = () => {
     if (!videoRef.current) return;
     
-    // Вычисляем время с начала суток в миллисекундах
+    // Получаем текущее видео с использованием бинарного поиска
+    const durations = VIDEO_PLAYLIST.map(v => v.duration);
     const now = new Date();
-    const msFromMidnight = 
-      now.getHours() * 3600000 +
-      now.getMinutes() * 60000 +
-      now.getSeconds() * 1000 +
-      now.getMilliseconds();
+    const offsetSec = getDayStartOffsetSeconds(now);
+    const result = getCurrentVideo(durations, offsetSec);
     
-    // Вычисляем позицию внутри цикла видео
-    const cyclePosition = msFromMidnight % TOTAL_VIDEO_DURATION;
+    const timeStr = now.getHours().toString().padStart(2, '0') + ':' +
+                    now.getMinutes().toString().padStart(2, '0') + ':' +
+                    now.getSeconds().toString().padStart(2, '0') + '.' +
+                    now.getMilliseconds().toString().padStart(3, '0');
     
-    // Устанавливаем позицию в секундах
-    const startPosition = cyclePosition / 1000;
+    console.log('🎬 [START] Starting video:', {
+      currentTime: timeStr,
+      offsetFromMidnight: offsetSec.toFixed(3) + 's',
+      videoIndex: result.VideoIndex,
+      file: VIDEO_PLAYLIST[result.VideoIndex].file,
+      positionInVideo: result.VideoTime.toFixed(3) + 's'
+    });
+    
+    setDebugInfo({
+      currentTime: timeStr,
+      offsetFromMidnight: offsetSec.toFixed(3),
+      videoIndex: result.VideoIndex,
+      videoFile: VIDEO_PLAYLIST[result.VideoIndex].file,
+      positionInVideo: result.VideoTime.toFixed(3)
+    });
+    
+    setCurrentVideoIndex(result.VideoIndex);
     
     const video = videoRef.current;
+    const videoFile = VIDEO_PLAYLIST[result.VideoIndex].file;
+    
+    // Устанавливаем источник видео
+    video.src = `./assets/videos/${videoFile}`;
     
     // Ждем загрузки метаданных перед установкой позиции
     const handleLoadedMetadata = () => {
       if (videoRef.current) {
-        videoRef.current.currentTime = startPosition;
+        videoRef.current.currentTime = result.VideoTime;
         videoRef.current.play().catch(err => {
           console.error('Error playing video:', err);
         });
@@ -46,7 +114,13 @@ const VideoIntro: React.FC<VideoIntroProps> = ({ onVideoClick }) => {
   };
   
   const syncVideo = () => {
-    console.log('🔄 [SYNC CHECK] Starting sync check...');
+    const now = new Date();
+    const timeStr = now.getHours().toString().padStart(2, '0') + ':' +
+                    now.getMinutes().toString().padStart(2, '0') + ':' +
+                    now.getSeconds().toString().padStart(2, '0') + '.' +
+                    now.getMilliseconds().toString().padStart(3, '0');
+    
+    console.log('🔄 [SYNC CHECK] Starting sync check...', { currentTime: timeStr });
     
     if (!videoRef.current) {
       console.log('❌ [SYNC CHECK] Video ref not available');
@@ -70,20 +144,48 @@ const VideoIntro: React.FC<VideoIntroProps> = ({ onVideoClick }) => {
     }
     
     try {
-      // Вычисляем ожидаемую позицию
-      const now = new Date();
-      const msFromMidnight = 
-        now.getHours() * 3600000 +
-        now.getMinutes() * 60000 +
-        now.getSeconds() * 1000 +
-        now.getMilliseconds();
+      // Получаем ожидаемое видео и позицию с использованием бинарного поиска
+      const durations = VIDEO_PLAYLIST.map(v => v.duration);
+      const offsetSec = getDayStartOffsetSeconds(now);
+      const result = getCurrentVideo(durations, offsetSec);
       
-      const cyclePosition = msFromMidnight % TOTAL_VIDEO_DURATION;
-      const expectedPosition = cyclePosition / 1000;
+      console.log('⏱️ [SYNC CHECK] Real-time calculation:', {
+        currentTime: timeStr,
+        offsetFromMidnight: offsetSec.toFixed(3) + 's',
+        expectedVideoIndex: result.VideoIndex,
+        expectedVideoFile: VIDEO_PLAYLIST[result.VideoIndex].file,
+        expectedPosition: result.VideoTime.toFixed(3) + 's'
+      });
       
-      // Текущая позиция (с учетом зацикливания)
-      const videoDurationSec = TOTAL_VIDEO_DURATION / 1000;
-      const actualPosition = video.currentTime % videoDurationSec;
+      setDebugInfo({
+        currentTime: timeStr,
+        offsetFromMidnight: offsetSec.toFixed(3),
+        videoIndex: result.VideoIndex,
+        videoFile: VIDEO_PLAYLIST[result.VideoIndex].file,
+        positionInVideo: result.VideoTime.toFixed(3)
+      });
+      
+      // Проверяем, нужно ли переключить видео
+      const currentVideoFile = video.src.split('/').pop() || '';
+      const expectedVideoFile = VIDEO_PLAYLIST[result.VideoIndex].file;
+      
+      if (currentVideoFile !== expectedVideoFile) {
+        console.log(`🔀 [SYNC CHECK] Switching video:`, {
+          from: currentVideoFile,
+          to: expectedVideoFile,
+          position: result.VideoTime.toFixed(3) + 's'
+        });
+        
+        setCurrentVideoIndex(result.VideoIndex);
+        video.src = `./assets/videos/${expectedVideoFile}`;
+        video.currentTime = result.VideoTime;
+        video.play().catch(err => console.error('Error playing video:', err));
+        return;
+      }
+      
+      // Текущая и ожидаемая позиция
+      const expectedPosition = result.VideoTime;
+      const actualPosition = video.currentTime;
       
       // Вычисляем drift
       const drift = expectedPosition - actualPosition;
@@ -104,7 +206,6 @@ const VideoIntro: React.FC<VideoIntroProps> = ({ onVideoClick }) => {
         video.playbackRate = newRate;
         
         // Вычисляем сколько времени нужно для коррекции
-        // При скорости 1.05x мы нагоняем 0.05 секунды за каждую секунду
         const correctionTime = Math.min(
           (Math.abs(drift) / 0.05) * 1000,
           10000 // Максимум 10 секунд
@@ -134,6 +235,27 @@ const VideoIntro: React.FC<VideoIntroProps> = ({ onVideoClick }) => {
     // Запускаем периодическую синхронизацию каждые 10 секунд
     syncIntervalRef.current = setInterval(syncVideo, 10000);
     
+    // Обновляем debug info 30 раз в секунду (~33ms)
+    const debugInterval = setInterval(() => {
+      const now = new Date();
+      const offsetSec = getDayStartOffsetSeconds(now);
+      const durations = VIDEO_PLAYLIST.map(v => v.duration);
+      const result = getCurrentVideo(durations, offsetSec);
+      
+      const timeStr = now.getHours().toString().padStart(2, '0') + ':' +
+                      now.getMinutes().toString().padStart(2, '0') + ':' +
+                      now.getSeconds().toString().padStart(2, '0') + '.' +
+                      now.getMilliseconds().toString().padStart(3, '0');
+      
+      setDebugInfo({
+        currentTime: timeStr,
+        offsetFromMidnight: offsetSec.toFixed(3),
+        videoIndex: result.VideoIndex,
+        videoFile: VIDEO_PLAYLIST[result.VideoIndex].file,
+        positionInVideo: result.VideoTime.toFixed(3)
+      });
+    }, 33);
+    
     // Обработчик паузы - автоматически возобновляем
     const handlePause = () => {
       console.log('⚠️ [VIDEO] Video paused unexpectedly, resuming...');
@@ -144,18 +266,42 @@ const VideoIntro: React.FC<VideoIntroProps> = ({ onVideoClick }) => {
       }
     };
     
-    // Подписываемся на событие паузы
+    // Обработчик окончания видео - переключаемся на следующее
+    const handleEnded = () => {
+      console.log('🎬 [VIDEO] Video ended, switching to next...');
+      const durations = VIDEO_PLAYLIST.map(v => v.duration);
+      const result = getCurrentVideo(durations);
+      
+      if (videoRef.current) {
+        const nextVideoFile = VIDEO_PLAYLIST[result.VideoIndex].file;
+        console.log(`▶️ [VIDEO] Loading next video: ${nextVideoFile} at ${result.VideoTime.toFixed(3)}s`);
+        
+        setCurrentVideoIndex(result.VideoIndex);
+        videoRef.current.src = `./assets/videos/${nextVideoFile}`;
+        videoRef.current.currentTime = result.VideoTime;
+        videoRef.current.play().catch(err => {
+          console.error('Error playing next video:', err);
+        });
+      }
+    };
+    
+    // Подписываемся на события
     const video = videoRef.current;
     if (video) {
       video.addEventListener('pause', handlePause);
+      video.addEventListener('ended', handleEnded);
     }
     
     return () => {
       if (syncIntervalRef.current) {
         clearInterval(syncIntervalRef.current);
       }
+      if (debugInterval) {
+        clearInterval(debugInterval);
+      }
       if (video) {
         video.removeEventListener('pause', handlePause);
+        video.removeEventListener('ended', handleEnded);
       }
     };
   }, []);
@@ -166,14 +312,37 @@ const VideoIntro: React.FC<VideoIntroProps> = ({ onVideoClick }) => {
         ref={videoRef}
         className="video-intro__video"
         muted
-        loop
         playsInline
-        src="./assets/videos/screensaver-full.1.mp4"
       >
         Ваш браузер не поддерживает видео
       </video>
       <div className="video-intro__overlay">
         <p className="video-intro__text">Нажмите на экран для продолжения</p>
+      </div>
+      
+      {/* Debug панель */}
+      <div style={{
+        position: 'absolute',
+        top: '20px',
+        right: '20px',
+        background: 'rgba(0, 0, 0, 0.8)',
+        color: '#00ff00',
+        padding: '15px',
+        borderRadius: '8px',
+        fontFamily: 'monospace',
+        fontSize: '12px',
+        lineHeight: '1.6',
+        zIndex: 1000,
+        minWidth: '300px'
+      }}>
+        <div style={{ fontWeight: 'bold', marginBottom: '10px', color: '#4ec9b0' }}>
+          ⏱️ Real-time Debug Info
+        </div>
+        <div><strong>Time:</strong> {debugInfo.currentTime}</div>
+        <div><strong>Offset:</strong> {debugInfo.offsetFromMidnight} сек</div>
+        <div><strong>Video #:</strong> {debugInfo.videoIndex}</div>
+        <div><strong>File:</strong> {debugInfo.videoFile}</div>
+        <div><strong>Position:</strong> {debugInfo.positionInVideo} сек</div>
       </div>
     </div>
   );
