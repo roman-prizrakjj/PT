@@ -8,6 +8,10 @@ const __dirname = path.dirname(__filename);
 
 let mainWindow;
 
+// Отключаем power-saving для видео и разрешаем autoplay без жестов пользователя
+app.commandLine.appendSwitch('disable-features', 'BackgroundVideoTrackOptimization');
+app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
+
 function createWindow() {
   // Проверяем, запущен ли dev-сервер
   const isDev = process.env.NODE_ENV !== 'production' && !app.isPackaged;
