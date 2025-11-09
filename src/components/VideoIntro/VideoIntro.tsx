@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './VideoIntro.css';
 
+// Конфигурация
+const DEBUG_MODE = false; // Включить дебаг панель
+
 // Конфигурация плейлиста видео
 const VIDEO_PLAYLIST = [
   { file: 'SSV_0_PromoBugBounty.mp4', duration: 95.000 },
@@ -321,29 +324,31 @@ const VideoIntro: React.FC<VideoIntroProps> = ({ onVideoClick }) => {
       </div>
       
       {/* Debug панель */}
-      <div style={{
-        position: 'absolute',
-        top: '20px',
-        right: '20px',
-        background: 'rgba(0, 0, 0, 0.8)',
-        color: '#00ff00',
-        padding: '15px',
-        borderRadius: '8px',
-        fontFamily: 'monospace',
-        fontSize: '12px',
-        lineHeight: '1.6',
-        zIndex: 1000,
-        minWidth: '300px'
-      }}>
-        <div style={{ fontWeight: 'bold', marginBottom: '10px', color: '#4ec9b0' }}>
-          ⏱️ Real-time Debug Info
+      {DEBUG_MODE && (
+        <div style={{
+          position: 'absolute',
+          top: '20px',
+          right: '20px',
+          background: 'rgba(0, 0, 0, 0.8)',
+          color: '#00ff00',
+          padding: '15px',
+          borderRadius: '8px',
+          fontFamily: 'monospace',
+          fontSize: '12px',
+          lineHeight: '1.6',
+          zIndex: 1000,
+          minWidth: '300px'
+        }}>
+          <div style={{ fontWeight: 'bold', marginBottom: '10px', color: '#4ec9b0' }}>
+            ⏱️ Real-time Debug Info
+          </div>
+          <div><strong>Time:</strong> {debugInfo.currentTime}</div>
+          <div><strong>Offset:</strong> {debugInfo.offsetFromMidnight} сек</div>
+          <div><strong>Video #:</strong> {debugInfo.videoIndex}</div>
+          <div><strong>File:</strong> {debugInfo.videoFile}</div>
+          <div><strong>Position:</strong> {debugInfo.positionInVideo} сек</div>
         </div>
-        <div><strong>Time:</strong> {debugInfo.currentTime}</div>
-        <div><strong>Offset:</strong> {debugInfo.offsetFromMidnight} сек</div>
-        <div><strong>Video #:</strong> {debugInfo.videoIndex}</div>
-        <div><strong>File:</strong> {debugInfo.videoFile}</div>
-        <div><strong>Position:</strong> {debugInfo.positionInVideo} сек</div>
-      </div>
+      )}
     </div>
   );
 };
