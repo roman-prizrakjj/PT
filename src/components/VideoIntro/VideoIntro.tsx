@@ -3,6 +3,8 @@ import './VideoIntro.css';
 
 // Конфигурация
 const DEBUG_MODE = false; // Включить дебаг панель
+const ENABLE_SYNC = false; // Включить автоматическую синхронизацию видео
+const SYNC_INTERVAL_MS = 10000; // Интервал синхронизации видео (мс)
 
 // Конфигурация плейлиста видео
 const VIDEO_PLAYLIST = [
@@ -235,8 +237,10 @@ const VideoIntro: React.FC<VideoIntroProps> = ({ onVideoClick }) => {
     // Запускаем видео при монтировании
     startSyncedVideo();
     
-    // Запускаем периодическую синхронизацию каждые 10 секунд
-    syncIntervalRef.current = setInterval(syncVideo, 10000);
+    // Запускаем периодическую синхронизацию
+    if (ENABLE_SYNC) {
+      syncIntervalRef.current = setInterval(syncVideo, SYNC_INTERVAL_MS);
+    }
     
     // Обновляем debug info 30 раз в секунду (~33ms)
     const debugInterval = setInterval(() => {
