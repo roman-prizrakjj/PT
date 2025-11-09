@@ -1,0 +1,123 @@
+.dashboards {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background-color: #E8EBF0;
+}
+
+.dashboards__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/dashboards/background.png');
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+
+/* Шапка */
+.dashboards__header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  z-index: 10;
+}
+
+.dashboards__home-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.2s;
+}
+
+.dashboards__home-button:hover {
+  transform: scale(1.05);
+}
+
+.dashboards__home-button img {
+  height: 64px;
+  width: auto;
+}
+
+.dashboards__title {
+  font-family: 'TT Positive Extended', sans-serif;
+  font-weight: 700;
+  font-size: 80px;
+  line-height: 100px;
+  color: #212121;
+  margin: 0;
+}
+
+.dashboards__logo {
+  width: 80px;
+  height: 80px;
+  background: #FF0000;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'TT Positive Extended', sans-serif;
+  font-weight: 700;
+  font-size: 48px;
+  color: white;
+}
+
+/* Левая панель табов */
+.dashboards__tabs {
+  position: absolute;
+  left: 48px;
+  top: 200px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 10;
+}
+
+.dashboards__tab {
+  background: #FFFFFF;
+  border: 2px solid #E8EBF0;
+  border-radius: 12px;
+  padding: 20px 24px;
+  font-family: 'TT Positive Extended', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  color: #44536A;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboards__tab:hover:not(.dashboards__tab--active) {
+  background: #F5F7FA;
+  transform: translateX(4px);
+}
+
+.dashboards__tab--active {
+  background: #FF0000 !important;
+  border-color: #FF0000 !important;
+  color: #FFFFFF !important;
+  font-weight: 700;
+  transform: translateX(4px);
+}
+
+/* Область контента */
+.dashboards__content {
+  position: absolute;
+  left: 400px;
+  top: 200px;
+  right: 48px;
+  bottom: 48px;
+  z-index: 5;
+}

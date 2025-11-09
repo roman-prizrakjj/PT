@@ -1,0 +1,69 @@
+.pt-ngfw {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Фоновое изображение */
+.pt-ngfw__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/ngfw/background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+/* Кнопка "Домой" */
+.pt-ngfw__home-button {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  z-index: 10;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: var(--transition-default);
+  padding: 0;
+}
+
+.pt-ngfw__home-button img {
+  display: block;
+  height: 60px;
+  width: auto;
+}
+
+.pt-ngfw__home-button:hover {
+  transform: scale(1.1);
+}
+
+.pt-ngfw__home-button:active {
+  transform: scale(0.95);
+}
+
+/* Заголовок */
+.pt-ngfw__title {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-bold);
+  font-size: 36px;
+  color: #000000;
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* Презентация поверх фона */
+.pt-ngfw > .presentation {
+  position: relative;
+  z-index: 1;
+}

@@ -1,0 +1,252 @@
+.positive-import-chart {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Подзаголовок */
+.positive-import-chart__subtitle {
+  display: flex;
+  align-items: center;
+  padding: 24px 10px 24px 64px;
+  background: rgba(204, 217, 230, 0.4);
+  border-left: 3px solid #6A7F98;
+  border-radius: 0px 24px 24px 0px;
+  font-family: 'TT Positive Extended', sans-serif;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.2;
+  color: #44536A;
+  margin: 0;
+}
+
+/* Белый контейнер */
+.positive-import-chart__graph {
+  flex: 1;
+  background: #FFFFFF;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  display: flex;
+  gap: 20px;
+  overflow: hidden;
+}
+
+/* Левая панель - список классов решений */
+.positive-import-chart__classes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 340px;
+  flex-shrink: 0;
+  background: rgba(216, 224, 235, 0.4);
+  border-radius: 16px;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.positive-import-chart__class-btn {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+  min-height: 60px;
+  border: 1px solid rgba(68, 83, 106, 0.2);
+  border-radius: 16px;
+  background: #FFFFFF;
+  cursor: pointer;
+  font-family: 'TT Positive Extended', sans-serif;
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 28px;
+  color: #44536A;
+  text-align: left;
+  transition: all 0.3s;
+}
+
+.positive-import-chart__class-btn:hover:not(.positive-import-chart__class-btn--active) {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(68, 83, 106, 0.3);
+}
+
+.positive-import-chart__class-btn--active {
+  background: #FF0000 !important;
+  color: #FFFFFF !important;
+  border-color: #FF0000 !important;
+}
+
+/* Центральная панель - зарубежные вендоры */
+.positive-import-chart__vendors {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  background: rgba(216, 224, 235, 0.2);
+  border-radius: 16px;
+  overflow-y: auto;
+}
+
+.positive-import-chart__vendors-header {
+  padding: 8px 0;
+}
+
+.positive-import-chart__vendors-label {
+  font-family: 'TT Positive Extended', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #FF0000;
+}
+
+.positive-import-chart__vendors-label-red {
+  font-family: 'TT Positive Extended', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #FF0000;
+}
+
+.positive-import-chart__vendors-title {
+  font-family: 'TT Positive Extended', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.2;
+  color: #44536A;
+  margin-bottom: 12px;
+  padding: 12px 10px 12px 24px;
+  background: rgba(204, 217, 230, 0.4);
+  border-left: 3px solid #6A7F98;
+  border-radius: 0px 12px 12px 0px;
+  margin-left: -20px;
+  margin-right: -20px;
+  padding-left: 44px;
+}
+
+.positive-import-chart__vendors-subtitle {
+  margin-top: 12px;
+  margin-bottom: 6px;
+}
+
+.positive-import-chart__vendors-description {
+  font-family: 'TT Positive Extended', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #44536A;
+  margin-bottom: 16px;
+}
+
+.positive-import-chart__vendors-section {
+  margin-top: 12px;
+}
+
+.positive-import-chart__vendors-section-title {
+  font-family: 'TT Positive Extended', sans-serif;
+  font-weight: 500;
+  font-size: 17px;
+  color: #44536A;
+  margin-bottom: 8px;
+}
+
+.positive-import-chart__vendors-item {
+  font-family: 'TT Positive Extended', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.4;
+  color: #44536A;
+  padding: 5px 0;
+}
+
+/* Правая панель - продукт PT */
+.positive-import-chart__product {
+  width: 500px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 24px;
+  background: rgba(204, 217, 230, 0.4);
+  border: 2px solid #FF0000;
+  border-radius: 16px;
+  overflow-y: auto;
+}
+
+.positive-import-chart__product-header {
+  padding: 6px 0;
+  margin-bottom: 6px;
+}
+
+.positive-import-chart__product-label {
+  font-family: 'TT Positive Extended', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #FF0000;
+}
+
+.positive-import-chart__product-name {
+  font-family: 'TT Positive Extended', sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 1.2;
+  color: #FF0000;
+  margin-bottom: 16px;
+  padding: 12px 20px;
+  border: 2px solid #FF0000;
+  border-radius: 12px;
+  background: rgba(216, 224, 235, 0.3);
+  display: inline-block;
+  align-self: flex-start;
+}
+
+.positive-import-chart__product-cert-label {
+  font-family: 'TT Positive Extended', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  color: #FF0000;
+  margin-top: 12px;
+  margin-bottom: 6px;
+}
+
+.positive-import-chart__product-cert {
+  font-family: 'TT Positive Extended', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #44536A;
+  margin-bottom: 12px;
+}
+
+.positive-import-chart__product-features {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.positive-import-chart__product-feature {
+  font-family: 'TT Positive Extended', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #44536A;
+  display: flex;
+  gap: 10px;
+}
+
+.positive-import-chart__product-arrow {
+  color: #FF0000;
+  flex-shrink: 0;
+}
+
+/* Scrollbar styling - скрыт */
+.positive-import-chart__classes::-webkit-scrollbar,
+.positive-import-chart__vendors::-webkit-scrollbar,
+.positive-import-chart__product::-webkit-scrollbar {
+  width: 0;
+  display: none;
+}
+
+.positive-import-chart__classes,
+.positive-import-chart__vendors,
+.positive-import-chart__product {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}

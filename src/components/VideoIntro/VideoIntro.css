@@ -1,0 +1,40 @@
+.video-intro {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  cursor: pointer;
+  background: var(--color-bg);
+}
+
+.video-intro__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-intro__overlay {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  padding: 20px 40px;
+  border-radius: 10px;
+  animation: pulse 2s infinite;
+}
+
+.video-intro__text {
+  font-size: var(--font-size-body);
+  color: var(--color-text-primary);
+  text-align: center;
+  margin: 0;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

@@ -1,0 +1,44 @@
+:root {
+  /* Цвета */
+  --color-bg: #000000;
+  --color-primary: #FF0000;
+  --color-card-bg: rgba(126, 0, 1, 0.2);
+  --color-card-border: #FF0000;
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: rgba(255, 255, 255, 0.7);
+  --color-black: #212121;
+  --color-frost: #D8E0EB;
+  --color-sky: #BCCBDD;
+  --color-border-subtle: #44536A;
+
+  /* Шрифты */
+  --font-family: 'Inter', 'TT Positive Extended', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-size-title: 80px;
+  --font-size-subtitle: 48px;
+  --font-size-body: 24px;
+  --font-weight-bold: 700;
+  --font-weight-regular: 400;
+  --line-height-title: 101px;
+  --line-height-subtitle: 60px;
+
+  /* Размеры (для 1920x1080) */
+  --card-width: 700px;
+  --card-height: 400px;
+  --icon-size: 100px;
+  --gap-cards: 75px;
+  --gap-content: 30px;
+  --border-radius-card: 32px;
+  --border-radius-icon: 24px;
+  --border-width: 4px;
+
+  /* Отступы */
+  --padding-card: 60px 30px;
+  --spacing-sm: 10px;
+  --spacing-md: 20px;
+  --spacing-lg: 40px;
+  --spacing-xl: 60px;
+
+  /* Эффекты */
+  --backdrop-blur: 100px;
+  --transition-default: all 0.3s ease;
+}

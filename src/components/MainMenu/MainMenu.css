@@ -1,0 +1,58 @@
+.main-menu {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+  background: var(--color-bg);
+  position: relative;
+}
+
+/* Фоновое изображение (будет добавлено позже) */
+.main-menu::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/src/assets/images/backgrounds/main-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+.main-menu__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--gap-cards);
+  max-width: 1500px;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+/* Кликабельная область для лого PT */
+.main-menu__logo-clickarea {
+  position: fixed;
+  top: 20px;
+  right: 30px;
+  width: 120px;
+  height: 100px;
+  z-index: 10;
+  cursor: pointer;
+  /* Для отладки можно раскомментировать: */
+  /* background: rgba(255, 0, 0, 0.2); */
+}
+
+@media (max-width: 1400px) {
+  .main-menu {
+    padding: 40px;
+  }
+  
+  .main-menu__grid {
+    gap: 50px;
+  }
+}

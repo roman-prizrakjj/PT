@@ -1,0 +1,60 @@
+{
+  "name": "rt-exhibition-app",
+  "version": "1.0.0",
+  "description": "Выставочное приложение РТ",
+  "main": "electron/main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "electron": "electron .",
+    "electron:dev": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && electron .\"",
+    "electron:prod": "npm run build && cross-env NODE_ENV=production electron .",
+    "electron:build": "npm run build && electron-builder"
+  },
+  "keywords": [
+    "electron",
+    "exhibition",
+    "kiosk"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.1.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "concurrently": "^8.2.2",
+    "cross-env": "^10.1.0",
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1",
+    "get-video-duration": "^4.1.0",
+    "sharp": "^0.34.4",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.8",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.rt.exhibition",
+    "productName": "РТ",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "!dist/**/*.map"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "sign": null,
+      "signingHashAlgorithms": []
+    }
+  }
+}

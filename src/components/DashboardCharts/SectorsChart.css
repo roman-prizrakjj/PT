@@ -1,0 +1,101 @@
+.sectors-chart {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Подзаголовок */
+.sectors-chart__subtitle {
+  display: flex;
+  align-items: center;
+  padding: 24px 10px 24px 64px;
+  background: rgba(204, 217, 230, 0.4);
+  border-left: 3px solid #6A7F98;
+  border-radius: 0px 24px 24px 0px;
+  font-family: 'TT Positive Extended', sans-serif;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.2;
+  color: #44536A;
+  margin: 0;
+}
+
+/* Белый контейнер */
+.sectors-chart__graph {
+  flex: 1;
+  background: #FFFFFF;
+  border-radius: 24px;
+  padding: 48px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  display: flex;
+  overflow: hidden;
+}
+
+/* Контейнер с donut и легендой */
+.sectors-chart__container {
+  display: flex;
+  width: 100%;
+  gap: 48px;
+  align-items: center;
+}
+
+/* Donut chart */
+.sectors-chart__donut {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sectors-chart__svg {
+  width: 100%;
+  height: 100%;
+  max-width: 900px;
+  max-height: 900px;
+}
+
+/* Легенда */
+.sectors-chart__legend {
+  flex: 0 0 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  padding-right: 16px;
+}
+
+.sectors-chart__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.sectors-chart__legend-item:hover {
+  background-color: rgba(204, 217, 230, 0.2);
+}
+
+.sectors-chart__legend-item.active {
+  background-color: rgba(204, 217, 230, 0.4);
+}
+
+.sectors-chart__legend-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #44536A;
+  flex-shrink: 0;
+}
+
+.sectors-chart__legend-label {
+  font-family: 'TT Positive Extended', sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: #44536A;
+  line-height: 1.2;
+}
