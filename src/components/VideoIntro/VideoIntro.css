@@ -21,6 +21,7 @@
   padding: 20px 40px;
   border-radius: 10px;
   animation: pulse 2s infinite;
+  display: none; /* Скрыта */
 }
 
 .video-intro__text {

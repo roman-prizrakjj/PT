@@ -40,6 +40,10 @@ function createWindow() {
   });
 }
 
+// Отключаем throttling для фоновых окон
+app.commandLine.appendSwitch('disable-background-timer-throttling');
+app.commandLine.appendSwitch('disable-renderer-backgrounding');
+
 app.whenReady().then(() => {
   // Регистрируем протокол для загрузки локальных файлов в production
   if (app.isPackaged) {
