@@ -6,15 +6,37 @@ const DEBUG_MODE = false; // Включить дебаг панель
 const ENABLE_SYNC = false; // Включить автоматическую синхронизацию видео
 const SYNC_INTERVAL_MS = 10000; // Интервал синхронизации видео (мс)
 
-// Конфигурация плейлиста видео
-const VIDEO_PLAYLIST = [
+// Конфигурация плейлистов видео
+// Будние дни (Понедельник-Пятница)
+const WEEKDAY_PLAYLIST = [
   { file: 'SSV_0_PromoBugBounty.mp4', duration: 95.000 },
+  { file: 'SSV_5_AboutPT.mp4', duration: 71.67 },
   { file: 'SSV_1_DemoBugBounty.mp4', duration: 108.800 },
+  { file: 'SSV_5_AboutPT.mp4', duration: 71.67 },
   { file: 'SSV_2_PromoCyberBattle.mp4', duration: 73.920 },
+  { file: 'SSV_5_AboutPT.mp4', duration: 71.67 }
+];
+
+// Выходные дни (Суббота-Воскресенье)
+const WEEKEND_PLAYLIST = [
+  { file: 'SSV_0_PromoBugBounty.mp4', duration: 95.000 },
+  { file: 'SSV_5_AboutPT.mp4', duration: 71.67 },
+  { file: 'SSV_1_DemoBugBounty.mp4', duration: 108.800 },
+  { file: 'SSV_5_AboutPT.mp4', duration: 71.67 },
+  { file: 'SSV_2_PromoCyberBattle.mp4', duration: 73.920 },
+  { file: 'SSV_5_AboutPT.mp4', duration: 71.67 },
   { file: 'SSV_3_PromoEducation.mp4', duration: 110.160 },
+  { file: 'SSV_5_AboutPT.mp4', duration: 71.67 },
   { file: 'SSV_4_ProgrammingOlymp.mp4', duration: 30.000 },
   { file: 'SSV_5_AboutPT.mp4', duration: 71.67 }
 ];
+
+// Функция для получения активного плейлиста
+function getActivePlaylist(): Array<{ file: string; duration: number }> {
+  const dayOfWeek = new Date().getDay(); // 0 = воскресенье, 6 = суббота
+  // Суббота (6) или Воскресенье (0)
+  return (dayOfWeek === 0 || dayOfWeek === 6) ? WEEKEND_PLAYLIST : WEEKDAY_PLAYLIST;
+}
 
 // Вспомогательные функции из DetectNowVideo.JS
 function getDayStartOffsetSeconds(d = new Date()): number {
@@ -70,7 +92,8 @@ const VideoIntro: React.FC<VideoIntroProps> = ({ onVideoClick }) => {
     if (!videoRef.current) return;
     
     // Получаем текущее видео с использованием бинарного поиска
-    const durations = VIDEO_PLAYLIST.map(v => v.duration);
+    const playlist = getActivePlaylist();
+    const durations = playlist.map(v => v.duration);
     const now = new Date();
     const offsetSec = getDayStartOffsetSeconds(now);
     const result = getCurrentVideo(durations, offsetSec);
@@ -84,7 +107,7 @@ const VideoIntro: React.FC<VideoIntroProps> = ({ onVideoClick }) => {
       currentTime: timeStr,
       offsetFromMidnight: offsetSec.toFixed(3) + 's',
       videoIndex: result.VideoIndex,
-      file: VIDEO_PLAYLIST[result.VideoIndex].file,
+      file: playlist[result.VideoIndex].file,
       positionInVideo: result.VideoTime.toFixed(3) + 's'
     });
     
@@ -92,14 +115,14 @@ const VideoIntro: React.FC<VideoIntroProps> = ({ onVideoClick }) => {
       currentTime: timeStr,
       offsetFromMidnight: offsetSec.toFixed(3),
       videoIndex: result.VideoIndex,
-      videoFile: VIDEO_PLAYLIST[result.VideoIndex].file,
+      videoFile: playlist[result.VideoIndex].file,
       positionInVideo: result.VideoTime.toFixed(3)
     });
     
     setCurrentVideoIndex(result.VideoIndex);
     
     const video = videoRef.current;
-    const videoFile = VIDEO_PLAYLIST[result.VideoIndex].file;
+    const videoFile = playlist[result.VideoIndex].file;
     
     // Устанавливаем источник видео
     video.src = `./assets/videos/${videoFile}`;
@@ -150,7 +173,8 @@ const VideoIntro: React.FC<VideoIntroProps> = ({ onVideoClick }) => {
     
     try {
       // Получаем ожидаемое видео и позицию с использованием бинарного поиска
-      const durations = VIDEO_PLAYLIST.map(v => v.duration);
+      const playlist = getActivePlaylist();
+      const durations = playlist.map(v => v.duration);
       const offsetSec = getDayStartOffsetSeconds(now);
       const result = getCurrentVideo(durations, offsetSec);
       
@@ -158,7 +182,7 @@ const VideoIntro: React.FC<VideoIntroProps> = ({ onVideoClick }) => {
         currentTime: timeStr,
         offsetFromMidnight: offsetSec.toFixed(3) + 's',
         expectedVideoIndex: result.VideoIndex,
-        expectedVideoFile: VIDEO_PLAYLIST[result.VideoIndex].file,
+        expectedVideoFile: playlist[result.VideoIndex].file,
         expectedPosition: result.VideoTime.toFixed(3) + 's'
       });
       
@@ -166,13 +190,13 @@ const VideoIntro: React.FC<VideoIntroProps> = ({ onVideoClick }) => {
         currentTime: timeStr,
         offsetFromMidnight: offsetSec.toFixed(3),
         videoIndex: result.VideoIndex,
-        videoFile: VIDEO_PLAYLIST[result.VideoIndex].file,
+        videoFile: playlist[result.VideoIndex].file,
         positionInVideo: result.VideoTime.toFixed(3)
       });
       
       // Проверяем, нужно ли переключить видео
       const currentVideoFile = video.src.split('/').pop() || '';
-      const expectedVideoFile = VIDEO_PLAYLIST[result.VideoIndex].file;
+      const expectedVideoFile = playlist[result.VideoIndex].file;
       
       if (currentVideoFile !== expectedVideoFile) {
         console.log(`🔀 [SYNC CHECK] Switching video:`, {
@@ -246,7 +270,8 @@ const VideoIntro: React.FC<VideoIntroProps> = ({ onVideoClick }) => {
     const debugInterval = setInterval(() => {
       const now = new Date();
       const offsetSec = getDayStartOffsetSeconds(now);
-      const durations = VIDEO_PLAYLIST.map(v => v.duration);
+      const playlist = getActivePlaylist();
+      const durations = playlist.map(v => v.duration);
       const result = getCurrentVideo(durations, offsetSec);
       
       const timeStr = now.getHours().toString().padStart(2, '0') + ':' +
@@ -258,7 +283,7 @@ const VideoIntro: React.FC<VideoIntroProps> = ({ onVideoClick }) => {
         currentTime: timeStr,
         offsetFromMidnight: offsetSec.toFixed(3),
         videoIndex: result.VideoIndex,
-        videoFile: VIDEO_PLAYLIST[result.VideoIndex].file,
+        videoFile: playlist[result.VideoIndex].file,
         positionInVideo: result.VideoTime.toFixed(3)
       });
     }, 33);
@@ -276,11 +301,12 @@ const VideoIntro: React.FC<VideoIntroProps> = ({ onVideoClick }) => {
     // Обработчик окончания видео - переключаемся на следующее
     const handleEnded = () => {
       console.log('🎬 [VIDEO] Video ended, switching to next...');
-      const durations = VIDEO_PLAYLIST.map(v => v.duration);
+      const playlist = getActivePlaylist();
+      const durations = playlist.map(v => v.duration);
       const result = getCurrentVideo(durations);
       
       if (videoRef.current) {
-        const nextVideoFile = VIDEO_PLAYLIST[result.VideoIndex].file;
+        const nextVideoFile = playlist[result.VideoIndex].file;
         console.log(`▶️ [VIDEO] Loading next video: ${nextVideoFile} at ${result.VideoTime.toFixed(3)}s`);
         
         setCurrentVideoIndex(result.VideoIndex);
