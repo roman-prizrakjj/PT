@@ -14,10 +14,7 @@ const MainMenu: React.FC<MainMenuProps> = ({ onCardClick, onLogoClick }) => {
   const imagesToPreload = useMemo(() => {
     const images: string[] = [];
     
-    // Thumbnails всех презентаций
-    menuData.maturityPresentation.slides.forEach(slide => {
-      if (slide.thumbnail) images.push(slide.thumbnail);
-    });
+    // Thumbnails презентаций
     menuData.ngfwPresentation.slides.forEach(slide => {
       if (slide.thumbnail) images.push(slide.thumbnail);
     });
@@ -25,10 +22,7 @@ const MainMenu: React.FC<MainMenuProps> = ({ onCardClick, onLogoClick }) => {
       if (slide.thumbnail) images.push(slide.thumbnail);
     });
     
-    // Первые слайды каждой презентации (полные изображения)
-    if (menuData.maturityPresentation.slides[0]) {
-      images.push(menuData.maturityPresentation.slides[0].image);
-    }
+    // Первые слайды презентаций (полные изображения)
     if (menuData.ngfwPresentation.slides[0]) {
       images.push(menuData.ngfwPresentation.slides[0].image);
     }
@@ -36,9 +30,7 @@ const MainMenu: React.FC<MainMenuProps> = ({ onCardClick, onLogoClick }) => {
       images.push(menuData.productsPresentation.slides[0].image);
     }
     
-    // Фоновые изображения и элементы UI каждой презентации
-    images.push('./maturity/background.png');
-    images.push('./maturity/home-button.png');
+    // Фоновые изображения и элементы UI презентаций
     images.push('./ngfw/background.png');
     images.push('./ngfw/home-button.png');
     images.push('./products/background.png');

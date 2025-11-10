@@ -9,7 +9,7 @@
     },
     {
       "id": 2,
-      "title": "Уровень ИБ-зрелости организаций",
+      "title": "MaxPatrol O2",
       "subtitle": "Пилотное исследование",
       "icon": "maturity-icon.png",
       "route": "/maturity"
@@ -4570,32 +4570,6 @@
             }
           }
         ]
-      }
-    ]
-  },
-  "maturityPresentation": {
-    "title": "Уровень ИБ-зрелости организаций",
-    "subtitle": "Пилотное исследование",
-    "slides": [
-      {
-        "id": 1,
-        "image": "./maturity/slides/1.png",
-        "thumbnail": "./maturity/thumbnails/1.png"
-      },
-      {
-        "id": 2,
-        "image": "/maturity/slides/2.png",
-        "thumbnail": "./maturity/thumbnails/2.png"
-      },
-      {
-        "id": 3,
-        "image": "/maturity/slides/3.png",
-        "thumbnail": "./maturity/thumbnails/3.png"
-      },
-      {
-        "id": 4,
-        "image": "/maturity/slides/4.png",
-        "thumbnail": "./maturity/thumbnails/4.png"
       }
     ]
   },
