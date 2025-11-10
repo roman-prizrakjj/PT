@@ -5,6 +5,8 @@ import './VideoIntro.css';
 const DEBUG_MODE = false; // Включить дебаг панель
 const ENABLE_SYNC = false; // Включить автоматическую синхронизацию видео
 const SYNC_INTERVAL_MS = 10000; // Интервал синхронизации видео (мс)
+const USE_FIXED_DAY = false; // Использовать фиксированный день недели для тестирования
+const FIXED_DAY_OF_WEEK = 6; // День недели для теста (0=Вс, 1=Пн, 2=Вт, 3=Ср, 4=Чт, 5=Пт, 6=Сб)
 
 // Конфигурация плейлистов видео
 // Будние дни (Понедельник-Пятница)
@@ -33,7 +35,7 @@ const WEEKEND_PLAYLIST = [
 
 // Функция для получения активного плейлиста
 function getActivePlaylist(): Array<{ file: string; duration: number }> {
-  const dayOfWeek = new Date().getDay(); // 0 = воскресенье, 6 = суббота
+  const dayOfWeek = USE_FIXED_DAY ? FIXED_DAY_OF_WEEK : new Date().getDay();
   // Суббота (6) или Воскресенье (0)
   return (dayOfWeek === 0 || dayOfWeek === 6) ? WEEKEND_PLAYLIST : WEEKDAY_PLAYLIST;
 }
