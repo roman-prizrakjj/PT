@@ -10,7 +10,7 @@
     {
       "id": 2,
       "title": "MaxPatrol O2",
-      "subtitle": "Пилотное исследование",
+      "subtitle": "Автопилот для защиты от киберугроз",
       "icon": "maturity-icon.png",
       "route": "/maturity"
     },
