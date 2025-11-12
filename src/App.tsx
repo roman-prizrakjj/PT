@@ -8,6 +8,9 @@ import Products from './pages/Products';
 import { useIdleTimer } from './hooks/useIdleTimer';
 import './App.css';
 
+// Конфигурация скринсейвера
+const ENABLE_SCREENSAVER = true; // Включить/выключить автоматический возврат к видео
+
 type ViewType = 'video' | 'menu' | 'dashboards' | 'ngfw' | 'products';
 
 const App: React.FC = () => {
@@ -17,9 +20,13 @@ const App: React.FC = () => {
   const { resetTimer } = useIdleTimer({
     timeout: 90000, // 90 секунд
     onIdle: () => {
-      console.log('Returning to screensaver after 90s of inactivity');
-      setCurrentView('video');
-      setShowVideoModal(false);
+      if (ENABLE_SCREENSAVER) {
+        console.log('Returning to screensaver after 90s of inactivity');
+        setCurrentView('video');
+        setShowVideoModal(false);
+      } else {
+        console.log('Screensaver is disabled, staying on current view');
+      }
     },
     events: ['touchstart', 'click']
   });
